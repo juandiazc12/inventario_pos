@@ -15,7 +15,6 @@ La plataforma utiliza una arquitectura **SPA (Single Page Application)** moderna
 - **📊 Reportes y Dashboard**: Visualización de métricas clave, historial de auditoría y exportación selectiva.
 - **🔌 Integraciones Avanzadas**: 
   - **Google Sheets/Drive**: Exportación automática de informes.
-  - **WhatsApp Proxy**: Notificaciones y comunicación fluida.
   - **QR/Barcodes**: Escaneo y generación para productos.
 
 ---
@@ -105,13 +104,6 @@ npm run dev
 ```
 El servidor escuchará en el puerto `3001`.
 
-### 2. Iniciar el Proxy de WhatsApp (Opcional)
-```bash
-cd backend
-npm run proxy:whatsapp
-```
-El proxy iniciará en el puerto `3003`.
-
 ### 3. Iniciar la Interfaz (Frontend)
 Debes servir los archivos estáticos de la carpeta `frontend/`. 
 - **VSCode**: Click derecho en `frontend/index.html` > **Open with Live Server**.
@@ -138,5 +130,4 @@ Al importar el `schema.sql`, se crea un usuario administrador:
 
 ---
 
-## 📱 Notas del Módulo WhatsApp
-Para que la integración funcione, asegúrate de que el puerto `3003` esté libre. Al iniciar el proxy, puedes acceder a la consola de estado en `http://localhost:3003/status`.
+
