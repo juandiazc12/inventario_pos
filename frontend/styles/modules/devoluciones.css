@@ -1,0 +1,370 @@
+/* devoluciones.css */
+
+/* Estadísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-left: 4px solid var(--primary);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Badges de tipo y estado */
+.badge.venta {
+    background: #8b5cf6;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.badge.compra {
+    background: #1e40af;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.badge.warning {
+    background: var(--warning);
+    color: var(--dark);
+}
+
+.badge.success {
+    background: var(--success);
+    color: white;
+}
+
+.badge.danger {
+    background: var(--danger);
+    color: white;
+}
+
+.badge.info {
+    background: var(--info);
+    color: white;
+}
+
+/* Búsqueda de ventas/compras */
+.search-results-overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+}
+
+.search-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-result-item:hover {
+    background: var(--bg-secondary);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.sale-info {
+    flex: 1;
+}
+
+.sale-info strong {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.sale-info small {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 0.125rem;
+}
+
+.sale-total {
+    margin-left: 1rem;
+}
+
+/* Detalles de venta/compra */
+.venta-detalle,
+.compra-detalle {
+    background: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+}
+
+.venta-detalle h4,
+.compra-detalle h4 {
+    margin: 0 0 1rem 0;
+    color: var(--text-primary);
+}
+
+/* Productos para devolución */
+.devolucion-producto-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
+}
+
+.devolucion-producto-item .product-info {
+    flex: 1;
+}
+
+.devolucion-producto-item .product-info strong {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.devolucion-producto-item .product-info small {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 0.125rem;
+}
+
+.devolucion-producto-item .product-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.devolucion-producto-item .product-controls label {
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+    white-space: nowrap;
+}
+
+.form-control.sm {
+    width: 80px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Resumen de devolución */
+.resumen-devolucion {
+    background: var(--bg-tertiary);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-top: 1.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.resumen-devolucion h4 {
+    margin: 0 0 0.75rem 0;
+    color: var(--text-primary);
+}
+
+.resumen-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.resumen-row:last-child {
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Detalle de devolución */
+.detalle-info {
+    background: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 0.5rem;
+}
+
+.info-row strong {
+    min-width: 120px;
+    margin-right: 0.5rem;
+}
+
+/* Tablas */
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.data-table th {
+    background: var(--bg-secondary);
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+}
+
+.data-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.data-table tr:hover {
+    background: var(--bg-secondary);
+}
+
+/* Filtros */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Botones */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* No results */
+.no-results {
+    padding: 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .devolucion-producto-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    
+    .product-controls {
+        justify-content: space-between;
+    }
+    
+    .info-row {
+        flex-direction: column;
+    }
+    
+    .info-row strong {
+        margin-bottom: 0.25rem;
+    }
+    
+    .resumen-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Animaciones */
+.search-result-item {
+    animation: fadeIn 0.2s ease-in;
+}
+
+.devolucion-producto-item {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

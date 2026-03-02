@@ -1,0 +1,33 @@
+<!-- auditoria.html -->
+<div class="content-section active" id="section-auditoria">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-shield-alt"></i> Auditoría</h2>
+        <button class="btn btn-danger" id="btn-limpiar-auditoria"><i class="fas fa-trash"></i> Limpiar >90 días</button>
+    </div>
+    <div class="toolbar">
+        <div class="search-bar"><i class="fas fa-search"></i><input type="text" class="form-control" id="audit-search"
+                placeholder="Buscar usuario o acción..."></div>
+        <input type="date" class="form-control" id="audit-fecha-inicio" style="width:auto">
+        <input type="date" class="form-control" id="audit-fecha-fin" style="width:auto">
+        <button class="btn btn-secondary" id="btn-filtrar-audit"><i class="fas fa-filter"></i> Filtrar</button>
+    </div>
+    <div class="table-wrapper" id="auditoria-table-container">
+        <div class="table-scroll">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Acción</th>
+                        <th>Módulo</th>
+                        <th>Detalle</th>
+                        <th>Estado</th>
+                        <th>IP</th>
+                    </tr>
+                </thead>
+                <tbody id="auditoria-tbody"></tbody>
+            </table>
+        </div>
+        <div class="pagination-wrapper"></div>
+    </div>
+</div>

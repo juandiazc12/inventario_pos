@@ -1,0 +1,115 @@
+/* ─── IMAGE UPLOAD COMPONENT ─── */
+.image-upload-zone {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-preview-wrapper {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-root);
+    border: 2px dashed var(--border-default);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Modificador para avatares (circular) */
+#avatarZone .image-preview-wrapper {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+}
+
+.image-preview-wrapper:hover {
+    border-color: var(--primary);
+    background: var(--primary-dim);
+}
+
+.image-preview-wrapper:hover .image-upload-overlay {
+    opacity: 1;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+}
+
+.image-placeholder i {
+    font-size: 24px;
+}
+
+.image-placeholder span {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.image-upload-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(99, 102, 241, 0.8);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(2px);
+}
+
+.image-upload-overlay i {
+    font-size: 20px;
+}
+
+.image-upload-overlay span {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.image-upload-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+/* Drag & Drop State */
+.image-upload-zone.drag-over .image-preview-wrapper {
+    border-color: var(--primary);
+    background: var(--primary-dim);
+    transform: scale(1.02);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .image-preview-wrapper {
+        width: 120px;
+        height: 120px;
+    }
+}

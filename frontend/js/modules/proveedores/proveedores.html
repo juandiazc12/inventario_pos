@@ -1,0 +1,28 @@
+<!-- proveedores.html -->
+<div class="content-section active" id="section-proveedores">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-truck"></i> Proveedores</h2>
+        <button class="btn btn-primary" id="btn-nuevo-proveedor"><i class="fas fa-plus"></i> Nuevo Proveedor</button>
+    </div>
+    <div class="toolbar">
+        <div class="search-bar"><i class="fas fa-search"></i><input type="text" class="form-control" id="prov-search"
+                placeholder="Buscar..."></div>
+    </div>
+    <div class="table-wrapper" id="proveedores-table-container">
+        <div class="table-scroll">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Contacto</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="proveedores-tbody"></tbody>
+            </table>
+        </div>
+        <div class="pagination-wrapper"></div>
+    </div>
+</div>

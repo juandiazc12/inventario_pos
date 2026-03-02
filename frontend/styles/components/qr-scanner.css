@@ -1,0 +1,80 @@
+/* qr-scanner.css */
+.qr-scanner-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.qr-scanner-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
+    box-shadow: var(--shadow-xl);
+}
+
+#qr-scanner-view {
+    width: 100%;
+    min-height: 250px;
+    background: #000;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    border: 2px solid var(--accent-primary-dim);
+}
+
+/* Animación de escaneo */
+.qr-scan-line {
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background: var(--accent-primary);
+    box-shadow: 0 0 10px var(--accent-primary);
+    z-index: 10;
+    animation: scanMove 2s infinite ease-in-out;
+}
+
+@keyframes scanMove {
+    0% {
+        top: 20px;
+    }
+
+    50% {
+        top: calc(100% - 20px);
+    }
+
+    100% {
+        top: 20px;
+    }
+}
+
+/* Estilos para el botón de activación QR al lado de inputs */
+.qr-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-qr {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    color: var(--accent-primary);
+    padding: 0 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-qr:hover {
+    background: var(--accent-primary-dim);
+    border-color: var(--accent-primary);
+}

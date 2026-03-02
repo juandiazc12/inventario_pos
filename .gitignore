@@ -1,0 +1,26 @@
+# Dependencias
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Entorno y Secretos
+.env
+backend/.env
+frontend/.env
+*.log
+
+# Base de datos local (SQLite o similar si existe en raíz)
+*.sqlite
+backend/database/*.sqlite
+
+# Archivos de sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Otros
+backend/uploads/*
+!backend/uploads/.gitkeep
+files/
+*.zip

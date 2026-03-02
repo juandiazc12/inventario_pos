@@ -1,0 +1,54 @@
+<!-- inventario.html -->
+<div class="content-section active" id="section-inventario">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-boxes"></i> Gestión de Inventario</h2>
+
+        <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-secondary" onclick="inventario_module.exportarCSV()"
+                title="Descargar todo el inventario">
+                <i class="fas fa-file-csv"></i> Exportar
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros y Búsqueda -->
+    <div class="card" style="margin-bottom:1rem; padding:1rem;">
+        <div class="form-grid" style="grid-template-columns: 2fr 1fr auto; align-items:end; gap:1rem;">
+
+            <div class="form-group" style="margin:0;">
+                <label>Buscar / Escanear Producto</label>
+                <div class="qr-input-group">
+                    <input type="text" id="inv-search" class="form-control"
+                        placeholder="Nombre, código (QR/Barra) o categoría..." autocomplete="off">
+                    <button type="button" class="btn-qr" onclick="QRScanner.open('inv-search')" title="Escanear Código">
+                        <i class="fas fa-qrcode"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin:0;">
+                <label>Categoría</label>
+                <select id="inv-categoria" class="form-control">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin:0; min-height:38px; display:flex; align-items:center;">
+                <label class="checkbox-label" style="margin:0; cursor:pointer;">
+                    <input type="checkbox" id="inv-stock-bajo">
+                    <span style="user-select:none;">Solo Stock Bajo</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Cards -->
+    <div class="card" style="padding:1rem; background:transparent; border:none; box-shadow:none;">
+        <div id="inventario-table-container">
+            <div class="pagination-content inventario-grid">
+                <!-- Cards se inyectarán aquí -->
+            </div>
+            <div class="pagination-wrapper"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<!-- configuracion.html -->
+<div class="content-section active" id="section-configuracion">
+    <div class="section-header">
+        <h1 class="topbar-title">Configuración del Sistema</h1>
+    </div>
+
+    <div class="grid-2 animate-in">
+        <!-- Branding -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-image"></i> Personalización (Branding)</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Logo del Sistema</label>
+                    <div id="cfg-logo-container"></div>
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label class="form-label">Nombre del Sistema</label>
+                    <input type="text" class="form-control" id="cfg-app-name" placeholder="Ej: Mi Empresa POS">
+                </div>
+                <div style="text-align: right; margin-top: 15px;">
+                    <button class="btn btn-primary" id="btn-save-branding">
+                        <i class="fas fa-save"></i> Guardar Branding
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parámetros Generales -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-cogs"></i> Parámetros Generales</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Símbolo de Moneda</label>
+                    <input type="text" class="form-control" id="cfg-moneda" placeholder="$">
+                </div>
+
+                <div class="form-group" style="margin-top: 24px;">
+                    <label class="form-label">Apariencia (Tema)</label>
+                    <div class="theme-selector" style="display:flex; gap:12px; margin-top:8px;">
+                        <label class="theme-option">
+                            <input type="radio" name="tema" value="light" id="tema-light" style="display:none">
+                            <div class="theme-card">
+                                <i class="fas fa-sun"></i><span>Claro</span>
+                            </div>
+                        </label>
+                        <label class="theme-option">
+                            <input type="radio" name="tema" value="dark" id="tema-dark" style="display:none">
+                            <div class="theme-card">
+                                <i class="fas fa-moon"></i><span>Oscuro</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="btn btn-primary" id="btn-save-general">
+                        <i class="fas fa-save"></i> Guardar Parámetros
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

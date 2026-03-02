@@ -1,0 +1,119 @@
+<!-- dashboard.html -->
+<div class="content-section active" id="section-dashboard">
+
+    <!-- KPI Cards Nexus.io Type -->
+    <div class="status-cards" id="dashboard-kpis"
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+
+        <div class="kpi-card">
+            <div class="kpi-icon green"><i class="fas fa-dollar-sign"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Ventas Hoy</span>
+                <span class="kpi-value" id="kpi-ventas">—</span>
+                <span class="text-muted" id="kpi-num-ventas" style="font-size: 0.75rem;">— transacciones</span>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon blue"><i class="fas fa-truck-loading"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Compras Hoy</span>
+                <span class="kpi-value" id="kpi-compras">—</span>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon purple"><i class="fas fa-chart-line"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Ganancia Hoy</span>
+                <span class="kpi-value" id="kpi-ganancia">—</span>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon yellow"><i class="fas fa-box"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Total Productos</span>
+                <span class="kpi-value" id="kpi-productos">—</span>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon red"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Stock Bajo</span>
+                <div style="display: flex; align-items: baseline; gap: 4px;">
+                    <span class="kpi-value" id="kpi-stock-bajo">—</span>
+                    <span class="text-muted" style="font-size: 0.75rem;">ítems</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon orange"><i class="fas fa-exchange-alt"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Traslados Pendientes</span>
+                <span class="kpi-value" id="kpi-traslados-pendientes">—</span>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon teal"><i class="fas fa-undo"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Devoluciones Mes</span>
+                <span class="kpi-value" id="kpi-devoluciones-mes">—</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fas fa-chart-line"></i> Ventas últimos 30 días</span>
+                <select id="grafico-periodo" class="form-control"
+                    style="width:auto;padding:0.3rem 0.5rem;font-size:0.8rem">
+                    <option value="7">7 días</option>
+                    <option value="30" selected>30 días</option>
+                    <option value="90">90 días</option>
+                </select>
+            </div>
+            <div class="card-body" style="height:220px;position:relative">
+                <canvas id="chart-ventas"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fas fa-chart-pie"></i> Ventas por Categoría</span>
+            </div>
+            <div class="card-body" style="height:220px;position:relative">
+                <canvas id="chart-categorias"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock bajo + Pedidos pendientes -->
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fas fa-exclamation-triangle" style="color:var(--warning)"></i> Stock
+                    Bajo</span>
+                <a href="#inventario" class="btn btn-sm btn-secondary" onclick="Router.navigateTo('inventario')">Ver
+                    todos</a>
+            </div>
+            <div class="card-body" style="padding:0">
+                <div id="dashboard-stock-bajo">
+                    <div class="loading-screen" style="min-height:100px"><i class="fas fa-spinner fa-spin"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fas fa-chart-bar"></i> Más Vendidos (mes)</span>
+            </div>
+            <div class="card-body" style="height:200px;position:relative">
+                <canvas id="chart-mas-vendidos"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

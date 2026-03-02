@@ -1,0 +1,49 @@
+<!-- insumos.html -->
+<div class="content-section active" id="section-insumos">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-flask"></i> Insumos</h2>
+        <button class="btn btn-primary" id="btn-nuevo-insumo"><i class="fas fa-plus"></i> Nuevo Insumo</button>
+    </div>
+    <div class="status-cards" style="margin-bottom:1rem">
+        <div class="status-card">
+            <div class="status-card-icon purple"><i class="fas fa-dollar-sign"></i></div>
+            <div class="status-card-info">
+                <span class="status-card-label">Total Invertido en Insumos</span>
+                <span class="status-card-value" id="insumos-total">—</span>
+            </div>
+        </div>
+    </div>
+    <div class="table-wrapper" id="insumos-table-container">
+        <div class="table-toolbar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <label for="insumos-per-page" style="font-size:13px; color:var(--text-secondary);">Mostrar:</label>
+                <select id="insumos-per-page" class="form-control" style="width:auto; padding:6px 12px; font-size:13px;">
+                    <option value="10">10</option>
+                    <option value="25" selected>25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-scroll">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Cantidad</th>
+                        <th>Unidad</th>
+                        <th>Precio Unit.</th>
+                        <th>Stock Mín.</th>
+                        <th>Fecha Registro</th>
+                        <th>Responsable</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="insumos-tbody"></tbody>
+            </table>
+        </div>
+        <div class="pagination-wrapper"></div>
+    </div>
+</div>

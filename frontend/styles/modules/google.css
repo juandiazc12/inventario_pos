@@ -1,0 +1,190 @@
+/* google.css — Estilos del módulo Google */
+
+.connection-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.connection-indicator.checking {
+    background: var(--warning);
+    animation: pulse 1.5s infinite;
+}
+
+.connection-indicator.connected {
+    background: var(--success);
+}
+
+.connection-indicator.disconnected {
+    background: var(--danger);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.tabs-container {
+    display: flex;
+    gap: 8px;
+    border-bottom: 2px solid var(--border-subtle);
+    margin-bottom: 1rem;
+}
+
+.tab-btn {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: -2px;
+}
+
+.tab-btn:hover {
+    color: var(--primary);
+    background: var(--bg-hover);
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.file-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.file-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.file-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    font-size: 24px;
+}
+
+.file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.file-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.loading-state,
+.empty-state,
+.error-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+
+.loading-state i,
+.empty-state i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.error-state {
+    color: var(--danger);
+}
+
+#sheet-viewer-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#sheet-viewer-modal .modal {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#sheet-viewer-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-default);
+}
+
+#sheet-viewer-modal .modal-body {
+    padding: 1.5rem;
+    overflow: auto;
+    flex: 1;
+}
+
+#sheet-viewer-modal .data-table {
+    font-size: 13px;
+}
+
+#sheet-viewer-modal .data-table th {
+    background: var(--bg-tertiary);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}

@@ -1,0 +1,34 @@
+<!-- productos.html -->
+<div class="content-section active" id="section-productos">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-box"></i> Productos</h2>
+        <button class="btn btn-primary" id="btn-nuevo-producto"><i class="fas fa-plus"></i> Nuevo Producto</button>
+    </div>
+    <div class="toolbar">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" class="form-control" id="prod-search" placeholder="Buscar...">
+        </div>
+    </div>
+    <div class="table-wrapper" id="productos-table-container">
+        <div class="table-scroll">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Img</th>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Talla</th>
+                        <th>P. Compra</th>
+                        <th>P. Venta</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="productos-tbody"></tbody>
+            </table>
+        </div>
+        <div class="pagination-wrapper"></div>
+    </div>
+</div>

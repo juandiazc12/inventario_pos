@@ -1,0 +1,35 @@
+<!-- pedidos.html -->
+<div class="content-section active" id="section-pedidos">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Pedidos</h2>
+        <button class="btn btn-primary" id="btn-nuevo-pedido"><i class="fas fa-plus"></i> Nuevo Pedido</button>
+    </div>
+    <div class="toolbar">
+        <select class="form-control" id="pedido-estado-filter" style="width:auto">
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="en_proceso">En Proceso</option>
+            <option value="completado">Completado</option>
+            <option value="cancelado">Cancelado</option>
+        </select>
+    </div>
+    <div class="table-wrapper" id="pedidos-table-container">
+        <div class="table-scroll">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Producto</th>
+                        <th>Cant.</th>
+                        <th>Total</th>
+                        <th>Cliente</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="pedidos-tbody"></tbody>
+            </table>
+        </div>
+        <div class="pagination-wrapper"></div>
+    </div>
+</div>

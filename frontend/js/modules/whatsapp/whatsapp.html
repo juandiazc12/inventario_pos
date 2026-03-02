@@ -1,0 +1,57 @@
+<!-- WhatsApp Web Module -->
+<div class="whatsapp-section whatsapp-fade-in">
+    <!-- Header -->
+    <div class="whatsapp-header">
+        <div class="whatsapp-title">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp Web Integration</span>
+        </div>
+        <div id="whatsapp-status" class="whatsapp-status loading">
+            <span class="status-dot"></span>
+            <span id="status-text">Verificando...</span>
+        </div>
+    </div>
+
+    <!-- Info Box -->
+    <div class="whatsapp-info">
+        <h3>
+            <i class="fas fa-info-circle"></i>
+            Instrucciones de uso
+        </h3>
+        <ul>
+            <li>Asegúrate que el servidor proxy esté corriendo en <code>http://localhost:3003</code></li>
+            <li>Escanea el código QR con tu teléfono para vincular tu cuenta</li>
+            <li>La sesión se mantendrá activa mientras uses el mismo navegador</li>
+            <li>Si no carga, verifica que el proxy esté funcionando correctamente</li>
+        </ul>
+    </div>
+
+    <!-- Controls -->
+    <div class="whatsapp-controls">
+        <button id="start-whatsapp-btn" class="whatsapp-btn primary" disabled>
+            <i class="fas fa-play"></i>
+            <span>Iniciar WhatsApp</span>
+        </button>
+        <button id="reload-whatsapp-btn" class="whatsapp-btn secondary" disabled>
+            <i class="fas fa-sync-alt"></i>
+            <span>Recargar</span>
+        </button>
+        <button id="check-proxy-btn" class="whatsapp-btn secondary">
+            <i class="fas fa-server"></i>
+            <span>Verificar Proxy</span>
+        </button>
+    </div>
+
+    <!-- WhatsApp Container -->
+    <div id="whatsapp-container" class="whatsapp-container">
+        <div class="whatsapp-loading">
+            <div class="spinner"></div>
+            <p>Esperando inicio de WhatsApp...</p>
+        </div>
+    </div>
+
+    <!-- Proxy Status -->
+    <div id="proxy-status" class="proxy-status" style="display: none;">
+        <strong>Estado del Proxy:</strong> <span id="proxy-details">Verificando...</span>
+    </div>
+</div>

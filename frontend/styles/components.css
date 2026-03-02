@@ -1,0 +1,456 @@
+/* ─── BOTONES NEXUS ───────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px var(--primary-dim);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--primary-glow);
+}
+
+.btn-secondary {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--primary-dim);
+}
+
+.btn-danger {
+    background: var(--danger-dim);
+    color: var(--danger);
+    border: 1px solid rgba(251, 113, 133, 0.2);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-info {
+    background: var(--primary-dim);
+    color: var(--primary);
+    border: 1px solid var(--border-default);
+}
+
+.btn-info:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+}
+
+/* ─── CARDS NEXUS (GLASS/SURFACE) ─────────────────────────── */
+.card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    /* Sombra más sutil en Nexus.io */
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow);
+    border-color: var(--primary-dim);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+}
+
+.card-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    /* Más pequeño y elegante */
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* KPI Card Nexus.io Style */
+.kpi-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    /* Alineación horizontal tipo Nexus.io */
+    gap: 20px;
+    transition: all 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-dim);
+}
+
+.kpi-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    /* Iconos redondos como en el dashboard */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background: var(--bg-root);
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.kpi-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.kpi-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: normal;
+    text-transform: none;
+    /* Menos agresivo que todo mayúsculas */
+}
+
+.kpi-value {
+    font-family: var(--font-body);
+    /* Usar la fuente de cuerpo para números en Nexus */
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+/* Trend badges (opcional pero le da el toque Nexus) */
+.trend {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-left: 8px;
+}
+
+.trend-up {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.trend-down {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ─── BADGES PILL NEXUS ────────────────────────────── */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-ok,
+.badge-success,
+.badge-completado {
+    background: var(--success-dim);
+    color: var(--success);
+}
+
+.badge-bajo,
+.badge-info,
+.badge-en_proceso {
+    background: var(--primary-dim);
+    color: var(--primary);
+}
+
+.badge-critico,
+.badge-warning,
+.badge-pendiente {
+    background: var(--warning-dim);
+    color: var(--warning);
+}
+
+.badge-sin-stock,
+.badge-danger,
+.badge-cancelado {
+    background: var(--danger-dim);
+    color: var(--danger);
+}
+
+/* ─── MODALES ────────────────────────────────────────────── */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+.modal-lg {
+    max-width: 800px;
+}
+
+.modal-sm {
+    max-width: 400px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 1;
+}
+
+.modal-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    padding: 0.25rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+/* ─── SECTION HEADER ─────────────────────────────────────── */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* ─── FILTROS / TOOLBAR ──────────────────────────────────── */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+/* ─── EMPTY STATE ────────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+}
+
+.empty-state p {
+    font-size: 0.875rem;
+}
+
+/* ─── ALERT BOXES ────────────────────────────────────────── */
+.alert {
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.alert-warning {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+
+.alert-danger {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+.alert-success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.alert-info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+}
+
+/* ─── GRID LAYOUTS ───────────────────────────────────────── */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+/* ─── IMAGE UTILS ────────────────────────────────────────── */
+.img-clickable {
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.img-clickable:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── BOTÓN TAMAÑO PEQUEÑO ───────────────────────────────────── */
+.btn-sm {
+    padding: 5px 12px;
+    font-size: 12px;
+    gap: 6px;
+}
+
+/* ─── BTN SUCCESS ────────────────────────────────────────────── */
+.btn-success {
+    background: var(--success-dim);
+    color: var(--success);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.btn-success:hover:not(:disabled) {
+    background: var(--success);
+    color: white;
+}
+
+/* ─── BADGES DE ESTADO ───────────────────────────────────────── */
+.badge-success,
+.badge-recibido,
+.badge-aprobada {
+    background: var(--success-dim);
+    color: var(--success);
+}
+
+.badge-warning,
+.badge-pendiente {
+    background: var(--warning-dim);
+    color: var(--warning);
+}
+
+.badge-info,
+.badge-despachado {
+    background: var(--primary-dim);
+    color: var(--primary);
+}
+
+.badge-danger,
+.badge-cancelado,
+.badge-rechazada {
+    background: var(--danger-dim);
+    color: var(--danger);
+}
+
+/* ─── SWEETALERT Z-INDEX FIX ─────────────────────────────────── */
+.swal2-container {
+    z-index: 10000 !important;
+}

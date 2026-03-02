@@ -1,0 +1,89 @@
+<!-- resumenes.html -->
+<div class="content-section active" id="section-resumenes">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-chart-bar"></i> Resúmenes</h2>
+        <button class="btn btn-secondary" onclick="API.download('/resumenes/exportar','productos.csv')">
+            <i class="fas fa-file-csv"></i> Exportar Productos CSV
+        </button>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:1.5rem">
+        <div class="card" id="res-diario">
+            <div class="card-header"><span class="card-title"><i class="fas fa-calendar-day"></i> Hoy</span></div>
+            <div class="card-body" id="res-diario-body">
+                <div class="loading-screen" style="min-height:80px"><i class="fas fa-spinner fa-spin"></i></div>
+            </div>
+        </div>
+        <div class="card" id="res-semanal">
+            <div class="card-header"><span class="card-title"><i class="fas fa-calendar-week"></i> Esta Semana</span>
+            </div>
+            <div class="card-body" id="res-semanal-body">
+                <div class="loading-screen" style="min-height:80px"><i class="fas fa-spinner fa-spin"></i></div>
+            </div>
+        </div>
+        <div class="card" id="res-mensual">
+            <div class="card-header"><span class="card-title"><i class="fas fa-calendar-alt"></i> Este Mes</span></div>
+            <div class="card-body" id="res-mensual-body">
+                <div class="loading-screen" style="min-height:80px"><i class="fas fa-spinner fa-spin"></i></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<div class="card" style="margin-bottom:1.5rem">
+    <div class="card-header">
+        <span class="card-title"><i class="fas fa-shopping-bag"></i> Ventas Recientes</span>
+    </div>
+    <div class="card-body" style="padding:0">
+        <div class="table-scroll">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Ticket</th>
+                        <th>Vendedor</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="ventas-recientes-tbody">
+                    <tr>
+                        <td colspan="5" class="text-center" style="padding:1.5rem;color:var(--text-muted)">Cargando...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <span class="card-title"><i class="fas fa-trophy"></i> Top 10 Más Vendidos</span>
+        <select class="form-control" id="mas-vendidos-periodo"
+            style="width:auto;padding:0.3rem 0.5rem;font-size:0.8rem">
+            <option value="mes">Este mes</option>
+            <option value="semana">Esta semana</option>
+            <option value="dia">Hoy</option>
+        </select>
+    </div>
+    <div class="card-body" style="padding:0">
+        <div class="table-scroll">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Producto</th>
+                        <th>Código</th>
+                        <th>Unidades Vendidas</th>
+                        <th>Total Ingresos</th>
+                    </tr>
+                </thead>
+                <tbody id="mas-vendidos-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>

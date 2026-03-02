@@ -1,0 +1,224 @@
+/* traslados.css */
+
+/* Estados de traslados */
+.badge.pendiente { background: var(--warning); color: var(--dark); }
+.badge.despachado { background: var(--info); color: white; }
+.badge.recibido { background: var(--success); color: white; }
+.badge.cancelado { background: var(--danger); color: white; }
+
+/* Selector de productos */
+.product-selector {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    background: var(--bg-secondary);
+}
+
+.search-box {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+}
+
+.search-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-result-item:hover {
+    background: var(--bg-secondary);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.product-info {
+    flex: 1;
+}
+
+.product-info strong {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.product-info small {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.product-stock {
+    margin-left: 1rem;
+}
+
+/* Productos seleccionados */
+.selected-products {
+    margin-top: 1rem;
+}
+
+.selected-product-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+}
+
+.product-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.product-controls label {
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+}
+
+.form-control.sm {
+    width: 80px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Modal de despacho */
+.despachar-producto-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
+}
+
+.despachar-producto-item .product-info {
+    flex: 1;
+}
+
+.despachar-producto-item .product-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.despachar-producto-item .product-controls label {
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+    white-space: nowrap;
+}
+
+/* Detalle de traslado */
+.detalle-info {
+    background: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 0.5rem;
+}
+
+.info-row strong {
+    min-width: 120px;
+    margin-right: 0.5rem;
+}
+
+/* Contador de pendientes */
+#contador-pendientes {
+    background: var(--danger);
+    color: white;
+    border-radius: 50%;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Tablas de traslados */
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.data-table th {
+    background: var(--bg-secondary);
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+}
+
+.data-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.data-table tr:hover {
+    background: var(--bg-secondary);
+}
+
+/* Botones de acción */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* No results */
+.no-results {
+    padding: 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .selected-product-item,
+    .despachar-producto-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    
+    .product-controls {
+        justify-content: space-between;
+    }
+    
+    .info-row {
+        flex-direction: column;
+    }
+    
+    .info-row strong {
+        margin-bottom: 0.25rem;
+    }
+}

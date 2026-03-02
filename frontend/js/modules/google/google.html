@@ -1,0 +1,200 @@
+<!-- google.html -->
+<div class="content-section active" id="section-google">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fab fa-google"></i> Google Sheets & Drive</h2>
+        <div style="display:flex; gap:8px;">
+            <button class="btn btn-secondary" id="btn-check-connection" title="Verificar conexión">
+                <i class="fas fa-sync"></i> Verificar
+            </button>
+            <button class="btn btn-primary" id="btn-connect-google" style="display:none;">
+                <i class="fab fa-google"></i> Conectar con Google
+            </button>
+            <button class="btn btn-danger" id="btn-disconnect-google" style="display:none;">
+                <i class="fas fa-unlink"></i> Desconectar
+            </button>
+        </div>
+    </div>
+
+    <!-- Configuración de Credenciales -->
+    <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+            <span class="card-title"><i class="fas fa-cog"></i> Configuración de Credenciales</span>
+            <button class="btn btn-sm btn-secondary" id="btn-toggle-credentials" onclick="google_module.toggleCredentialsForm()">
+                <i class="fas fa-edit"></i> Configurar
+            </button>
+        </div>
+        <div class="card-body">
+            <div id="credentials-status" style="display:flex; align-items:center; gap:12px; margin-bottom:1rem;">
+                <div id="credentials-indicator" class="connection-indicator"></div>
+                <div>
+                    <strong id="credentials-status-text">Cargando...</strong>
+                    <p id="credentials-status-desc" style="margin:0; font-size:13px; color:var(--text-muted);">Verificando configuración</p>
+                </div>
+            </div>
+            <div id="credentials-form" style="display:none;">
+                <div class="form-grid">
+                    <div class="form-group form-full">
+                        <label>Google Client ID *</label>
+                        <input type="text" class="form-control" id="google-client-id" placeholder="xxxxx.apps.googleusercontent.com">
+                        <small style="color:var(--text-muted); font-size:12px;">Obténlo desde Google Cloud Console</small>
+                    </div>
+                    <div class="form-group form-full">
+                        <label>Google Client Secret *</label>
+                        <input type="password" class="form-control" id="google-client-secret" placeholder="GOCSPX-xxxxx">
+                        <small style="color:var(--text-muted); font-size:12px;">Mantén este valor seguro</small>
+                    </div>
+                    <div class="form-group form-full">
+                        <label>Redirect URI</label>
+                        <input type="text" class="form-control" id="google-redirect-uri" placeholder="http://localhost:3001/api/google/callback">
+                        <small style="color:var(--text-muted); font-size:12px;">Debe coincidir con el configurado en Google Cloud Console</small>
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px; margin-top:1rem;">
+                    <button class="btn btn-primary" onclick="google_module.saveCredentials()">
+                        <i class="fas fa-save"></i> Guardar Credenciales
+                    </button>
+                    <button class="btn btn-secondary" onclick="google_module.toggleCredentialsForm()">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado de conexión -->
+    <div id="google-connection-status" class="card" style="margin-bottom:1.5rem;">
+        <div class="card-body" style="display:flex; align-items:center; gap:12px;">
+            <div id="connection-indicator" class="connection-indicator">
+                <i class="fas fa-circle"></i>
+            </div>
+            <div>
+                <strong id="connection-status-text">Verificando conexión...</strong>
+                <p id="connection-status-desc" style="margin:0; font-size:13px; color:var(--text-muted);">Espera un momento</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs para Sheets, Drive y Gmail -->
+    <div class="tabs-container" style="margin-bottom:1.5rem;">
+        <button class="tab-btn active" data-tab="sheets">
+            <i class="fas fa-table"></i> Google Sheets
+        </button>
+        <button class="tab-btn" data-tab="drive">
+            <i class="fab fa-google-drive"></i> Google Drive
+        </button>
+        <button class="tab-btn" data-tab="gmail">
+            <i class="fas fa-envelope"></i> Gmail
+        </button>
+    </div>
+
+    <!-- Contenido de Google Sheets -->
+    <div id="tab-sheets" class="tab-content active">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fas fa-table"></i> Mis Hojas de Cálculo</span>
+                <button class="btn btn-sm btn-secondary" id="btn-refresh-sheets">
+                    <i class="fas fa-sync"></i> Actualizar
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="sheets-list-container">
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando hojas de cálculo...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido de Google Drive -->
+    <div id="tab-drive" class="tab-content" style="display:none;">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fab fa-google-drive"></i> Mis Archivos</span>
+                <div style="display:flex; gap:8px;">
+                    <select id="drive-filter" class="form-control" style="width:auto; padding:6px 12px;">
+                        <option value="all">Todos los archivos</option>
+                        <option value="sheets">Solo Hojas de cálculo</option>
+                        <option value="docs">Documentos</option>
+                        <option value="images">Imágenes</option>
+                    </select>
+                    <button class="btn btn-sm btn-secondary" id="btn-refresh-drive">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="drive-files-container">
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando archivos...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido de Gmail -->
+    <div id="tab-gmail" class="tab-content" style="display:none;">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fas fa-envelope"></i> Mis Correos</span>
+                <div style="display:flex; gap:8px;">
+                    <select id="gmail-filter" class="form-control" style="width:auto; padding:6px 12px;">
+                        <option value="">Todos los correos</option>
+                        <option value="is:unread">No leídos</option>
+                        <option value="is:important">Importantes</option>
+                        <option value="has:attachment">Con adjuntos</option>
+                    </select>
+                    <input type="text" id="gmail-search" class="form-control" style="width:200px; padding:6px 12px;" placeholder="Buscar correos...">
+                    <button class="btn btn-sm btn-secondary" id="btn-refresh-gmail">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="gmail-list-container">
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando correos...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver contenido de Sheet -->
+    <div id="sheet-viewer-modal" style="display:none;">
+        <div class="modal-backdrop" onclick="google_module.closeSheetViewer()">
+            <div class="modal" onclick="event.stopPropagation()" style="max-width:90vw; max-height:90vh;">
+                <div class="modal-header">
+                    <h3 id="sheet-viewer-title">Hoja de Cálculo</h3>
+                    <button class="btn-icon" onclick="google_module.closeSheetViewer()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow:auto;">
+                    <div id="sheet-viewer-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver correo -->
+    <div id="email-viewer-modal" style="display:none;">
+        <div class="modal-backdrop" onclick="google_module.closeEmailViewer()">
+            <div class="modal" onclick="event.stopPropagation()" style="max-width:90vw; max-height:90vh;">
+                <div class="modal-header">
+                    <h3 id="email-viewer-subject">Correo</h3>
+                    <button class="btn-icon" onclick="google_module.closeEmailViewer()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow:auto;">
+                    <div id="email-viewer-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

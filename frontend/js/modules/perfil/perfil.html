@@ -1,0 +1,104 @@
+<!-- perfil.html -->
+<div class="content-section active" id="section-perfil">
+    <div class="section-header">
+        <h1 class="topbar-title">Mi Perfil</h1>
+    </div>
+
+    <div class="perfil-grid animate-in">
+        <!-- Columna izquierda: Avatar + info básica -->
+        <div class="perfil-aside">
+            <div class="card perfil-avatar-card">
+                <div class="avatar-upload-zone" id="avatarZone"></div>
+                <div class="perfil-info-static">
+                    <div class="info-row">
+                        <span class="info-label">Usuario</span>
+                        <span class="info-value" id="perfilUsuario">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Rol</span>
+                        <span id="perfilRol" class="badge badge-ok">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Miembro desde</span>
+                        <span class="info-value" id="perfilFecha">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Último acceso</span>
+                        <span class="info-value" id="perfilUltimoLogin">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna derecha: Formularios -->
+        <div class="perfil-main">
+            <!-- Información personal -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-id-card"></i> Información Personal</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group form-full">
+                            <label class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" id="pi-nombre" placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="pi-email" placeholder="correo@ejemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="pi-telefono" placeholder="+57 ...">
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; text-align: right;">
+                        <button class="btn btn-primary" id="btnGuardarPerfil">
+                            <i class="fas fa-save"></i> Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seguridad -->
+            <div class="card" style="margin-top: 16px;">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-lock"></i> Seguridad</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Nueva Contraseña</label>
+                            <input type="password" class="form-control" id="ps-nuevo">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirmar Nueva Contraseña</label>
+                            <input type="password" class="form-control" id="ps-confirmar">
+                        </div>
+                    </div>
+
+                    <!-- Medidor de fortaleza -->
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span class="strength-label" id="strengthLabel">Sin contraseña</span>
+                    </div>
+
+                    <!-- Requisitos -->
+                    <ul class="password-rules" id="passwordRules">
+                        <li id="rule-length"><i class="fas fa-circle"></i> Mínimo 8 caracteres</li>
+                        <li id="rule-number"><i class="fas fa-circle"></i> Al menos 1 número</li>
+                        <li id="rule-upper"><i class="fas fa-circle"></i> Al menos 1 mayúscula</li>
+                    </ul>
+
+                    <div style="text-align: right;">
+                        <button class="btn btn-primary" id="btnCambiarPassword">
+                            <i class="fas fa-shield-alt"></i> Actualizar contraseña
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

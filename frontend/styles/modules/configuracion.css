@@ -1,0 +1,44 @@
+/* Estilos específicos del módulo configuracion */
+
+/* configuracion.css */
+.theme-selector {
+    padding: 4px;
+}
+
+.theme-card {
+    flex: 1;
+    cursor: pointer;
+    background: var(--bg-card);
+    border: 2px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: all var(--transition-fast);
+}
+
+.theme-card i {
+    font-size: 24px;
+    color: var(--text-muted);
+}
+
+.theme-card span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.theme-option input:checked+.theme-card {
+    border-color: var(--accent-primary);
+    background: var(--accent-primary-dim);
+}
+
+.theme-option input:checked+.theme-card i {
+    color: var(--accent-primary);
+}
+
+.theme-option input:checked+.theme-card span {
+    color: var(--text-primary);
+}

@@ -1,0 +1,84 @@
+<!-- traslados.html -->
+<div class="content-section active" id="section-traslados">
+
+    <!-- Header -->
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Traslados de Bodega</h2>
+        <button class="btn btn-primary" id="btn-nuevo-traslado" style="display:none;"
+            onclick="window.traslados_module.mostrarModalNuevoTraslado()">
+            <i class="fas fa-plus"></i> Nueva Solicitud
+        </button>
+    </div>
+
+    <!-- Vista Local (admin / quien solicita) -->
+    <div id="vista-local" style="display:none;">
+        <div class="card">
+            <div class="card-header" style="margin-bottom:0.75rem; padding-bottom:0.75rem;">
+                <span class="card-title">Mis Solicitudes de Traslado</span>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="tabla-traslados-local">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vista Bodega (quien despacha) -->
+    <div id="vista-bodega" style="display:none;">
+        <div class="card" style="margin-bottom:1.5rem;">
+            <div class="card-header" style="margin-bottom:0.75rem; padding-bottom:0.75rem;">
+                <span class="card-title">
+                    Solicitudes Pendientes
+                    <span class="badge badge-danger" id="contador-pendientes" style="display:none;">0</span>
+                </span>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="tabla-traslados-bodega">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Solicitado por</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Hace</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" style="margin-bottom:0.75rem; padding-bottom:0.75rem;">
+                <span class="card-title">Historial de Traslados</span>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="tabla-historial-bodega">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Solicitado por</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

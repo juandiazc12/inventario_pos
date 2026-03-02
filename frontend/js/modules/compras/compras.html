@@ -1,0 +1,105 @@
+<!-- compras.html -->
+<div class="content-section active" id="section-compras">
+    <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-truck-loading"></i> Compras / Ingreso de Stock</h2>
+    </div>
+
+    <div class="grid-2">
+        <!-- Panel Izquierdo: Buscador y Registro de Ingreso -->
+        <div class="card">
+            <div class="card-header"><span class="card-title">Registrar Ingreso</span></div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Escanear QR/Barra o Buscar Producto</label>
+                    <div class="qr-input-group">
+                        <input type="text" class="form-control" id="c-search" placeholder="Escanea QR/Barra o busca..."
+                            autocomplete="off">
+                        <button type="button" class="btn-qr" onclick="QRScanner.open('c-search')"
+                            title="Escanear Código">
+                            <i class="fas fa-qrcode"></i>
+                        </button>
+                    </div>
+                    <div id="c-search-results" class="search-results-overlay"
+                        style="display:none; max-height:200px; overflow-y:auto; margin-top:0.25rem;"></div>
+                </div>
+
+                <!-- Visualización del Producto -->
+                <div id="c-producto-preview"
+                    style="display:none; text-align:center; padding:1.5rem; background:var(--bg-tertiary); border-radius:var(--radius-md); margin-bottom:1.5rem;">
+                    <img id="c-prod-img" src="" alt="Producto"
+                        style="width:120px; height:120px; object-fit:cover; border-radius:var(--radius-sm); margin-bottom:1rem; box-shadow:var(--shadow-sm);">
+                    <h3 id="c-prod-nombre" style="margin:0 0 0.5rem 0; font-size:1.1rem;">Nombre del Producto</h3>
+
+                    <div
+                        style="display:flex; justify-content:center; gap:1.5rem; margin-bottom:1rem; font-size:0.9rem;">
+                        <span class="badge info">Stock Actual: <b id="c-prod-stock">0</b></span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Cantidad a Agregar</label>
+                            <input type="number" class="form-control" id="c-cantidad" min="1" value="1"
+                                style="text-align:center">
+                        </div>
+                        <div class="form-group">
+                            <label>Costo Unitario ($)</label>
+                            <input type="number" class="form-control" id="c-costo" min="0" step="0.01"
+                                style="text-align:center">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Proveedor (Opcional)</label>
+                        <select class="form-control" id="c-proveedor">
+                            <option value="">Sin proveedor</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-success btn-full" id="btn-registrar-compra"
+                        onclick="compras_module.registrarIngreso()">
+                        <i class="fas fa-plus-circle"></i> Agregar al Stock
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Derecho: Historial Reciente -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Últimos Ingresos</span>
+                <button class="btn btn-sm btn-secondary" id="btn-filtrar-compras"><i class="fas fa-filter"></i>
+                    Filtros</button>
+            </div>
+
+            <div class="card-body" style="padding:0;">
+                <div class="filter-bar" id="c-filtros"
+                    style="display:none; padding:1rem; background:var(--bg-tertiary); border-bottom:1px solid var(--border);">
+                    <div class="form-grid" style="grid-template-columns: 1fr 1fr auto;">
+                        <input type="date" class="form-control" id="compra-fecha-inicio">
+                        <input type="date" class="form-control" id="compra-fecha-fin">
+                        <button class="btn btn-primary" onclick="compras_module.filtrar()"><i
+                                class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="table-scroll" id="compras-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Producto</th>
+                                <th>Cant.</th>
+                                <th>Costo</th>
+                                <th>Total</th>
+                                <th>Prov.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="compras-tbody"></tbody>
+                    </table>
+                    <!-- Paginación aquí -->
+                    <div class="pagination-wrapper"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

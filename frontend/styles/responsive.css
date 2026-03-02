@@ -1,0 +1,133 @@
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE.CSS — Media queries móvil
+═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    /* Notificaciones en móvil */
+    .notifications-dropdown {
+        width: calc(100vw - 32px);
+        right: -8px;
+    }
+
+    /* Sidebar oculto en móvil */
+    .sidebar {
+        transform: translateX(-100%);
+        width: var(--sidebar-w) !important;
+    }
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+        width: var(--sidebar-w-expanded) !important;
+    }
+
+    .sidebar.mobile-open .sidebar-logo-text,
+    .sidebar.mobile-open .nav-link span,
+    .sidebar.mobile-open .nav-section-label,
+    .sidebar.mobile-open .btn-logout span {
+        opacity: 1;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+
+    /* Botón menú visible en móvil para abrir el sidebar */
+    .sidebar-toggle {
+        display: flex !important;
+        margin: 0 4px;
+        padding: 10px 12px;
+    }
+
+    .sidebar-toggle i {
+        font-size: 1.25rem;
+    }
+
+    /* Header */
+    .main-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .page-title {
+        font-size: 1rem;
+    }
+
+    /* Content */
+    .content-area {
+        padding: 1rem;
+    }
+
+    /* Status cards */
+    .status-cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Grids */
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid,
+    .form-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Tablas */
+    .data-table {
+        font-size: 0.8rem;
+    }
+
+    .data-table thead th,
+    .data-table tbody td {
+        padding: 0.6rem 0.75rem;
+    }
+
+    /* Botones táctiles */
+    .btn {
+        min-height: 44px;
+    }
+
+    .btn-sm {
+        min-height: 36px;
+    }
+
+    /* Toolbar */
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-bar {
+        min-width: unset;
+    }
+
+    /* Section header */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Modal */
+    .modal {
+        max-width: 100%;
+        margin: 0;
+        border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .status-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .pagination-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+}

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Web Integration Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header p {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .controls {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #128c7e;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status.online {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .whatsapp-container {
+            padding: 20px;
+            min-height: 600px;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h3 {
+            margin: 0 0 8px 0;
+            color: #0066cc;
+            font-size: 16px;
+        }
+
+        .info-box ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #333;
+        }
+
+        .info-box li {
+            margin-bottom: 4px;
+        }
+
+        .proxy-status {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #495057;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 WhatsApp Web Integration</h1>
+            <p>Proxy inverso para embeber WhatsApp Web en tu aplicación</p>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn" class="btn" onclick="startWhatsApp()">Iniciar WhatsApp</button>
+            <button id="reloadBtn" class="btn btn-secondary" onclick="reloadWhatsApp()" disabled>Recargar</button>
+            <button id="checkProxyBtn" class="btn btn-secondary" onclick="checkProxyStatus()">Verificar Proxy</button>
+            <div id="statusDiv" class="status loading">
+                <span class="status-dot">●</span>
+                <span id="statusText">Verificando...</span>
+            </div>
+        </div>
+
+        <div class="whatsapp-container">
+            <div class="info-box">
+                <h3>📋 Instrucciones de uso:</h3>
+                <ul>
+                    <li>Asegúrate que el servidor proxy esté corriendo en <code>http://localhost:3002</code></li>
+                    <li>Escanea el código QR con tu teléfono para vincular tu cuenta</li>
+                    <li>La sesión se mantendrá activa mientras uses el mismo navegador</li>
+                    <li>Si no carga, verifica que el proxy esté funcionando correctamente</li>
+                </ul>
+            </div>
+
+            <div id="whatsappFrame"></div>
+        </div>
+    </div>
+
+    <!-- Cargar el módulo de WhatsApp -->
+    <script src="js/modules/whatsapp/whatsapp-iframe.js"></script>
+
+    <script>
+        let whatsappIframe = null;
+
+        // Verificar estado del proxy al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            checkProxyStatus();
+        });
+
+        async function checkProxyStatus() {
+            const statusDiv = document.getElementById('statusDiv');
+            const statusText = document.getElementById('statusText');
+            const startBtn = document.getElementById('startBtn');
+
+            statusDiv.className = 'status loading';
+            statusText.textContent = 'Verificando proxy...';
+
+            try {
+                const response = await fetch('http://localhost:3002/status');
+                const status = await response.json();
+
+                if (status.status === 'running') {
+                    statusDiv.className = 'status online';
+                    statusText.textContent = 'Proxy en línea';
+                    startBtn.disabled = false;
+
+                    // Mostrar información del proxy
+                    console.log('Proxy status:', status);
+                } else {
+                    throw new Error('Proxy not running');
+                }
+            } catch (error) {
+                statusDiv.className = 'status offline';
+                statusText.textContent = 'Proxy desconectado';
+                startBtn.disabled = true;
+
+                console.error('Proxy check failed:', error);
+                alert('⚠️ El servidor proxy no está corriendo. Inicia el proxy con:\n\nnode src/modules/whatsapp/whatsapp-proxy.js');
+            }
+        }
+
+        function startWhatsApp() {
+            if (whatsappIframe) {
+                whatsappIframe.destroy();
+            }
+
+            whatsappIframe = new WhatsAppIframe('whatsappFrame', {
+                proxyUrl: 'http://localhost:3003/whatsapp',
+                height: '600px',
+                onLoad: function () {
+                    console.log('✅ WhatsApp cargado exitosamente');
+                    document.getElementById('reloadBtn').disabled = false;
+                },
+                onError: function (error) {
+                    console.error('❌ Error cargando WhatsApp:', error);
+                    document.getElementById('reloadBtn').disabled = false;
+                }
+            });
+        }
+
+        function reloadWhatsApp() {
+            if (whatsappIframe) {
+                whatsappIframe.reload();
+            }
+        }
+
+        // Auto-verificar el estado cada 30 segundos
+        setInterval(checkProxyStatus, 30000);
+    </script>
+</body>
+
+</html>
