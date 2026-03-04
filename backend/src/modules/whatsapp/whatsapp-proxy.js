@@ -74,7 +74,6 @@ app.use('/whatsapp', (req, res, next) => {
     ];
 
     if (forbiddenHeaders.includes(name.toLowerCase())) {
-      console.log(`🗑️ Bloqueando cabecera de seguridad: ${name}`);
       return;
     }
     return originalSetHeader.apply(this, arguments);

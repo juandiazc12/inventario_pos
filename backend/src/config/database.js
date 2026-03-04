@@ -36,8 +36,6 @@ async function query(sql, params = []) {
         const [rows] = await pool.execute(sql, params);
         return rows;
     } catch (err) {
-        console.error('❌ Error en query:', err.message);
-        console.error('   SQL:', sql);
         throw err;
     }
 }

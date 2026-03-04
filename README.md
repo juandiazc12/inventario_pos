@@ -43,16 +43,18 @@ La plataforma utiliza una arquitectura **SPA (Single Page Application)** moderna
 
 ---
 
-## 🗄️ Preparación de la Base de Datos
+## 🗄️ Preparación de la Base de Datos (Automatizada)
 
 1. Abre tu administrador de MySQL (XAMPP, MySQL Workbench, etc.).
 2. Crea una base de datos llamada `inventario_db`:
    ```sql
    CREATE DATABASE inventario_db;
    ```
-3. Importa el archivo de esquema completo:
-   - Se encuentra en: `backend/database/schema.sql`.
-   - Si existen migraciones adicionales en `backend/database/migrations/`, ejecútalas en orden numérico.
+3. Ejecuta el script de inicialización automática desde la carpeta `backend/`:
+   ```bash
+   node database/init-db.js
+   ```
+   *Este comando creará todas las tablas necesarias, aplicará configuraciones y cargará los datos iniciales automáticamente.*
 
 ---
 

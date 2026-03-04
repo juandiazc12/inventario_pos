@@ -71,6 +71,19 @@ CREATE TABLE IF NOT EXISTS usuarios (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- TABLA: google_tokens
+CREATE TABLE IF NOT EXISTS google_tokens (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT NOT NULL,
+  access_token TEXT NOT NULL,
+  refresh_token TEXT,
+  expiry_date DATETIME,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_usuario (usuario_id),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 -- TABLA: ventas
 CREATE TABLE IF NOT EXISTS ventas (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -81,6 +94,7 @@ CREATE TABLE IF NOT EXISTS ventas (
   cliente_id INT,
   usuario_id INT,
   ticket_numero VARCHAR(50),
+  estado_devolucion TINYINT DEFAULT 0 COMMENT '0: Normal, 1: Parcial, 2: Total/Cambiado',
   fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (producto_id) REFERENCES productos(id),
   FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE SET NULL,
@@ -120,7 +134,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
--- TABLA: insumos (materias primas, no se venden)
+-- TABLA: insumos
 CREATE TABLE IF NOT EXISTS insumos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(200) NOT NULL,
@@ -138,7 +152,7 @@ CREATE TABLE IF NOT EXISTS insumos (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
--- TABLA: auditoria/logs
+-- TABLA: auditoria
 CREATE TABLE IF NOT EXISTS auditoria (
   id INT AUTO_INCREMENT PRIMARY KEY,
   usuario_id INT,
@@ -153,7 +167,7 @@ CREATE TABLE IF NOT EXISTS auditoria (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
--- TABLA: ticket_counter (numeración correlativa)
+-- TABLA: ticket_counter
 CREATE TABLE IF NOT EXISTS ticket_counter (
   id INT AUTO_INCREMENT PRIMARY KEY,
   ultimo_numero INT DEFAULT 0,
@@ -221,7 +235,9 @@ CREATE TABLE IF NOT EXISTS devoluciones (
   id INT AUTO_INCREMENT PRIMARY KEY,
   codigo VARCHAR(20) UNIQUE NOT NULL,
   tipo ENUM('venta','compra') NOT NULL,
-  referencia_id INT NOT NULL,
+  referencia_id INT NULL,
+  referencia_ticket VARCHAR(50) NULL COMMENT 'Número de ticket de venta (para tipo = venta)',
+  producto_nuevo_id INT NULL,
   usuario_id INT NOT NULL,
   motivo ENUM(
     'producto_defectuoso',
@@ -229,17 +245,21 @@ CREATE TABLE IF NOT EXISTS devoluciones (
     'no_deseado',
     'exceso_de_pedido',
     'mal_estado',
+    'cambio_producto',
     'otro'
   ) NOT NULL,
   motivo_detalle TEXT,
   estado ENUM('pendiente','aprobada','rechazada') DEFAULT 'pendiente',
   tipo_reembolso ENUM('efectivo','credito','cambio') DEFAULT 'efectivo',
   total_devuelto DECIMAL(10,2) DEFAULT 0,
+  valor_adicional DECIMAL(10,2) DEFAULT 0,
   afecta_inventario BOOLEAN DEFAULT TRUE,
   notas TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+  INDEX idx_devoluciones_ticket (referencia_ticket),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+  FOREIGN KEY (producto_nuevo_id) REFERENCES productos(id)
 );
 
 -- TABLA: devoluciones_detalle
@@ -259,27 +279,23 @@ CREATE TABLE IF NOT EXISTS devoluciones_detalle (
 -- DATOS INICIALES
 -- ============================================================
 
-INSERT INTO ticket_counter (ultimo_numero, prefijo) VALUES (0, 'TKT');
+INSERT IGNORE INTO ticket_counter (id, ultimo_numero, prefijo) VALUES (1, 0, 'TKT');
 
--- Ubicaciones iniciales
-INSERT INTO ubicaciones (nombre, descripcion) VALUES
-  ('Local Principal', 'Tienda principal de venta al público'),
-  ('Bodega Central', 'Almacén principal de productos'),
-  ('Bodega Secundaria', 'Almacén secundario para productos de bajo movimiento');
+INSERT IGNORE INTO ubicaciones (id, nombre, descripcion) VALUES
+  (1, 'Local Principal', 'Tienda principal de venta al público'),
+  (2, 'Bodega Central', 'Almacén principal de productos'),
+  (3, 'Bodega Secundaria', 'Almacén secundario para productos de bajo movimiento');
 
--- Categorías de ejemplo
-INSERT INTO categorias (nombre, descripcion) VALUES
-  ('General', 'Categoría general'),
-  ('Electrónica', 'Productos electrónicos'),
-  ('Alimentos', 'Productos alimenticios'),
-  ('Ropa', 'Prendas de vestir'),
-  ('Hogar', 'Artículos para el hogar');
+INSERT IGNORE INTO categorias (id, nombre, descripcion) VALUES
+  (1, 'General', 'Categoría general'),
+  (2, 'Electrónica', 'Productos electrónicos'),
+  (3, 'Alimentos', 'Productos alimenticios'),
+  (4, 'Ropa', 'Prendas de vestir'),
+  (5, 'Hogar', 'Artículos para el hogar');
 
--- Usuario administrador por defecto
--- IMPORTANTE: Ejecutar el script setup-admin.js para generar el hash correcto
--- O reemplazar el hash aquí con uno generado por bcrypt para "admin123"
+-- Usuario administrador por defecto (admin / admin123)
 -- Hash de ejemplo para "admin123" con 10 rounds:
-INSERT INTO usuarios (usuario, password_hash, rol, nombre, permisos)
+INSERT IGNORE INTO usuarios (usuario, password_hash, rol, nombre, permisos)
 VALUES (
   'admin',
   '$2a$10$R.n/9tIb36m79QBLeC6qKe9g.jSmOkglixQk442VPhXrz.RFnSujC',

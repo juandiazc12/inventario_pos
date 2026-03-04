@@ -23,12 +23,6 @@ const API = {
      */
     _headers(extra = {}) {
         const token = this._getToken();
-        console.log('Token encontrado:', token ? 'SÍ' : 'NO'); // Debug temporal
-        console.log('Endpoint:', API_BASE); // Debug temporal
-        if (token) {
-            console.log('Token length:', token.length); // Debug temporal
-            console.log('Token starts with Bearer:', token.startsWith('eyJ')); // Debug JWT
-        }
         return {
             'Content-Type': 'application/json',
             ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
