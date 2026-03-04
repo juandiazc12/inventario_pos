@@ -50,7 +50,7 @@ La plataforma utiliza una arquitectura **SPA (Single Page Application)** moderna
    ```sql
    CREATE DATABASE inventario_db;
    ```
-3. Ejecuta el script de inicialización automática desde la carpeta `backend/`:
+3. Ejecuta el script de inicialización automática desde la carpeta `cd backend/`:
    ```bash
    node database/init-db.js
    ```
