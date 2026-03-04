@@ -10,8 +10,19 @@ const auditMiddleware = async (req, res, next) => {
     res.json = function (data) {
         // Solo registrar si es mutación y fue exitosa
         if (['POST', 'PUT', 'DELETE'].includes(req.method) && res.statusCode < 400) {
-            const pathParts = req.path.split('/').filter(Boolean);
-            const modulo = pathParts[0] || 'desconocido';
+            // Usar originalUrl para asegurar que tenemos la ruta completa sin importar el montaje
+            const fullPath = (req.originalUrl || req.url).split('?')[0];
+            const pathParts = fullPath.split('/').filter(Boolean);
+
+            // Si empieza por 'api', el módulo es el siguiente segmento
+            let modulo = 'desconocido';
+            if (pathParts.length > 0) {
+                if (pathParts[0].toLowerCase() === 'api' && pathParts.length > 1) {
+                    modulo = pathParts[1];
+                } else {
+                    modulo = pathParts[0];
+                }
+            }
 
             const accionMap = {
                 POST: 'crear',

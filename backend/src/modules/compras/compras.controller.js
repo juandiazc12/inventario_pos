@@ -1,15 +1,24 @@
 const { query, getConnection } = require('../../config/database');
 
 const comprasService = {
-    async getAll({ fecha_inicio, fecha_fin, proveedor_id } = {}) {
-        let sql = `SELECT c.*, p.nombre as producto_nombre, pr.nombre as proveedor_nombre, u.nombre as usuario_nombre
-               FROM compras c JOIN productos p ON c.producto_id = p.id
-               LEFT JOIN proveedores pr ON c.proveedor_id = pr.id
-               LEFT JOIN usuarios u ON c.usuario_id = u.id WHERE 1=1`;
+    async getAll({ fecha_inicio, fecha_fin, proveedor_id, busqueda } = {}) {
+        let sql = `SELECT c.*, p.nombre as producto_nombre, p.codigo as producto_codigo, 
+                       pr.nombre as proveedor_nombre, u.nombre as usuario_nombre
+                FROM compras c 
+                JOIN productos p ON c.producto_id = p.id
+                LEFT JOIN proveedores pr ON c.proveedor_id = pr.id
+                LEFT JOIN usuarios u ON c.usuario_id = u.id WHERE 1=1`;
         const params = [];
         if (fecha_inicio) { sql += ' AND DATE(c.fecha) >= ?'; params.push(fecha_inicio); }
         if (fecha_fin) { sql += ' AND DATE(c.fecha) <= ?'; params.push(fecha_fin); }
         if (proveedor_id) { sql += ' AND c.proveedor_id = ?'; params.push(proveedor_id); }
+
+        if (busqueda) {
+            sql += ' AND (p.nombre LIKE ? OR p.codigo LIKE ? OR pr.nombre LIKE ?)';
+            const b = `%${busqueda}%`;
+            params.push(b, b, b);
+        }
+
         sql += ' ORDER BY c.fecha DESC';
         return await query(sql, params);
     },

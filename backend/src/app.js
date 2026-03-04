@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
+const auditMiddleware = require('./middleware/audit.middleware');
 
 const app = express();
 
@@ -30,6 +31,8 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ─── RUTAS ───────────────────────────────────────────────────────────────────
+app.use(auditMiddleware);
+
 // Autenticación y perfil
 app.use('/api/auth', require('./modules/auth/auth.routes'));
 app.use('/api/perfil', require('./modules/perfil/perfil.routes'));

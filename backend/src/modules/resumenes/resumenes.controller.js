@@ -39,16 +39,51 @@ const svc = {
         );
     },
 
-    async getVentasRecientes(limit = 10) {
-        return await query(
-            `SELECT v.id, v.fecha, v.total, v.ticket_numero, c.nombre as cliente_nombre, u.nombre as usuario_nombre
-             FROM ventas v 
-             LEFT JOIN clientes c ON v.cliente_id = c.id
-             LEFT JOIN usuarios u ON v.usuario_id = u.id
-             GROUP BY v.ticket_numero, v.fecha, v.total, v.id, c.nombre, u.nombre
-             ORDER BY v.fecha DESC LIMIT ?`,
-            [limit]
-        );
+    async getVentasRecientes({ limit = 10, page = 1, busqueda = '' } = {}) {
+        const offset = (parseInt(page) - 1) * parseInt(limit);
+        let sql = `
+            SELECT v.id, v.fecha, v.total, v.ticket_numero, v.estado_devolucion, 
+                   c.nombre as cliente_nombre, u.nombre as usuario_nombre
+            FROM ventas v 
+            LEFT JOIN clientes c ON v.cliente_id = c.id
+            LEFT JOIN usuarios u ON v.usuario_id = u.id
+            WHERE 1=1
+        `;
+        const params = [];
+
+        if (busqueda) {
+            sql += ` AND (v.ticket_numero LIKE ? OR c.nombre LIKE ? OR u.nombre LIKE ?)`;
+            const searchParam = `%${busqueda}%`;
+            params.push(searchParam, searchParam, searchParam);
+        }
+
+        sql += ` GROUP BY v.id ORDER BY v.fecha DESC LIMIT ? OFFSET ?`;
+        params.push(parseInt(limit), offset);
+
+        const rows = await query(sql, params);
+
+        // Get total count for pagination
+        let countSql = `
+            SELECT COUNT(DISTINCT v.id) as total 
+            FROM ventas v
+            LEFT JOIN clientes c ON v.cliente_id = c.id
+            LEFT JOIN usuarios u ON v.usuario_id = u.id
+            WHERE 1=1
+        `;
+        const countParams = [];
+        if (busqueda) {
+            countSql += ` AND (v.ticket_numero LIKE ? OR c.nombre LIKE ? OR u.nombre LIKE ?)`;
+            const searchParam = `%${busqueda}%`;
+            countParams.push(searchParam, searchParam, searchParam);
+        }
+        const totalRows = await query(countSql, countParams);
+
+        return {
+            data: rows,
+            total: totalRows[0]?.total || 0,
+            page: parseInt(page),
+            limit: parseInt(limit)
+        };
     }
 };
 
@@ -56,7 +91,7 @@ const ctrl = {
     async getDiario(req, res, next) { try { res.json(await svc.getResumen(1)); } catch (e) { next(e); } },
     async getSemanal(req, res, next) { try { res.json(await svc.getResumen(7)); } catch (e) { next(e); } },
     async getMensual(req, res, next) { try { res.json(await svc.getResumen(30)); } catch (e) { next(e); } },
-    async getVentasRecientes(req, res, next) { try { res.json(await svc.getVentasRecientes(10)); } catch (e) { next(e); } },
+    async getVentasRecientes(req, res, next) { try { res.json(await svc.getVentasRecientes(req.query)); } catch (e) { next(e); } },
     async getMasVendidos(req, res, next) { try { const { periodo = 'mes' } = req.query; res.json(await svc.getMasVendidos(periodo)); } catch (e) { next(e); } },
     async exportarCSV(req, res, next) {
         try {

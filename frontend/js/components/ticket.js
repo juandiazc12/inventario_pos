@@ -58,9 +58,21 @@ const TicketComponent = {
           <span>${total}</span>
         </div>
 
-        <div style="text-align:center; font-size:0.75rem; border-top: 1px dashed #000; padding-top: 0.75rem;">
+        <div style="text-align:center; font-size:0.75rem; border-top: 1px dashed #000; padding-top: 0.75rem; margin-top: 0.5rem;">
           ¡GRACIAS POR SU PREFERENCIA!<br>
           Visite nuestro sitio web
+        </div>
+
+        <!-- Política de Devoluciones Colombia -->
+        <div style="margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #000; font-size: 0.65rem; line-height: 1.2;">
+          <strong style="display:block; text-align:center; margin-bottom: 0.25rem;">POLÍTICA DE CAMBIOS Y DEVOLUCIONES (COLOMBIA)</strong>
+          <ul style="margin: 0; padding-left: 10px;">
+            <li><strong>Plazo para cambios:</strong> 30 días calendario con ticket original.</li>
+            <li><strong>Estado del producto:</strong> Sin uso, etiquetas y empaque original.</li>
+            <li><strong>Garantía Legal:</strong> Defectos de fábrica según fabricante o 1 año (Ley 1480).</li>
+            <li><strong>Derecho de Retracto:</strong> 5 días hábiles para compras no presenciales/financiadas.</li>
+            <li><strong>Saldos:</strong> No devolución de efectivo por cambio de opinión; se genera saldo a favor o cambio directo pagando excedente.</li>
+          </ul>
         </div>
       </div>
     `;

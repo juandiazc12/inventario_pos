@@ -71,10 +71,12 @@ window.compras_module = {
         if (matches.length > 0) {
             resultsDiv.innerHTML = matches.map(p => `
                 <div class="search-result-item" onclick="compras_module._selectProduct(${p.id})">
-                    <div style="font-weight:bold;">${escapeHtml(p.nombre)}</div>
-                    <div style="font-size:0.8rem; color:var(--text-muted); display:flex; justify-content:space-between;">
-                        <span>${p.codigo || 'S/C'}</span>
-                        <span>Stock: ${p.stock}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-weight:700; color:var(--text-primary);">${escapeHtml(p.nombre)}</span>
+                        <span class="badge badge-info" style="font-size:0.65rem;">${p.codigo || 'S/C'}</span>
+                    </div>
+                    <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem;">
+                        Stock disponible: <strong>${p.stock}</strong>
                     </div>
                 </div>
             `).join('');
@@ -187,11 +189,14 @@ window.compras_module = {
     },
 
     async filtrar() {
+        const busqueda = document.getElementById('compra-busqueda')?.value || '';
         const fi = document.getElementById('compra-fecha-inicio').value;
         const ff = document.getElementById('compra-fecha-fin').value;
-        let url = '/compras?';
+
+        let url = `/compras?busqueda=${encodeURIComponent(busqueda)}&`;
         if (fi) url += `fecha_inicio=${fi}&`;
         if (ff) url += `fecha_fin=${ff}`;
+        if (url.endsWith('&')) url = url.slice(0, -1);
 
         try {
             const compras = await API.get(url);
@@ -201,3 +206,10 @@ window.compras_module = {
         }
     }
 };
+
+// Listener para búsqueda en historial con debounce
+document.addEventListener('input', (e) => {
+    if (e.target.id === 'compra-busqueda') {
+        Utils.debounce(() => compras_module.filtrar(), 500)();
+    }
+});

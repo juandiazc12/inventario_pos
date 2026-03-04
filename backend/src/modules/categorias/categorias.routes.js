@@ -3,10 +3,10 @@ const router = express.Router();
 const ctrl = require('./categorias.controller');
 const authMiddleware = require('../../middleware/auth.middleware');
 const { requireRole } = require('../../middleware/role.middleware');
-const auditMiddleware = require('../../middleware/audit.middleware');
+
 
 router.use(authMiddleware);
-router.use(auditMiddleware);
+
 
 router.get('/', ctrl.getAll);
 router.post('/', requireRole('admin'), ctrl.create);

@@ -79,13 +79,13 @@ const devolucionesService = {
             WHERE 1=1
         `;
         const params = [];
-        
+
         if (tipo) { sql += ' AND d.tipo = ?'; params.push(tipo); }
         if (estado) { sql += ' AND d.estado = ?'; params.push(estado); }
         if (motivo) { sql += ' AND d.motivo = ?'; params.push(motivo); }
         if (fecha_inicio) { sql += ' AND DATE(d.created_at) >= ?'; params.push(fecha_inicio); }
         if (fecha_fin) { sql += ' AND DATE(d.created_at) <= ?'; params.push(fecha_fin); }
-        
+
         sql += ' ORDER BY d.created_at DESC';
         return await query(sql, params);
     },
@@ -152,7 +152,11 @@ const devolucionesService = {
 
     // FIX B-1/B-2: ahora recibe ticket_numero como referencia para devoluciones de venta
     async createDevolucionVenta(data, usuarioId) {
-        const { ticket_numero, productos, motivo, motivo_detalle, tipo_reembolso, afecta_inventario, notas } = data;
+        const {
+            ticket_numero, productos, motivo, motivo_detalle,
+            tipo_reembolso, afecta_inventario, notas,
+            producto_nuevo_id, valor_adicional
+        } = data;
         const conn = await getConnection();
 
         try {
@@ -192,9 +196,17 @@ const devolucionesService = {
 
             // Insertar devolución — guardamos el ticket como referencia legible
             const [result] = await conn.execute(
-                `INSERT INTO devoluciones (codigo, tipo, referencia_id, referencia_ticket, usuario_id, motivo, motivo_detalle, tipo_reembolso, afecta_inventario, notas)
-                 VALUES (?, 'venta', NULL, ?, ?, ?, ?, ?, ?, ?)`,
-                [codigo, ticket_numero, usuarioId, motivo, motivo_detalle, tipo_reembolso, afecta_inventario ? 1 : 0, notas]
+                `INSERT INTO devoluciones (
+                    codigo, tipo, referencia_id, referencia_ticket, usuario_id, 
+                    motivo, motivo_detalle, tipo_reembolso, afecta_inventario, notas,
+                    producto_nuevo_id, valor_adicional
+                )
+                 VALUES (?, 'venta', NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    codigo, ticket_numero, usuarioId, motivo, motivo_detalle,
+                    tipo_reembolso, afecta_inventario ? 1 : 0, notas,
+                    producto_nuevo_id || null, valor_adicional || 0
+                ]
             );
 
             const devolucionId = result.insertId;
@@ -388,6 +400,8 @@ const devolucionesService = {
                 throw new Error('La devolución no existe o no está en estado pendiente');
             }
 
+            const dev = devolucion[0];
+
             // FIX B-4: Obtener detalles con conn.execute() dentro de la misma transacción
             const [detalles] = await conn.execute(
                 'SELECT * FROM devoluciones_detalle WHERE devolucion_id = ?',
@@ -395,48 +409,98 @@ const devolucionesService = {
             );
 
             // Procesar según el tipo
-            if (devolucion[0].tipo === 'venta') {
+            if (dev.tipo === 'venta') {
                 // Devolución de venta: sumar stock al inventario
                 for (const detalle of detalles) {
-                    if (devolucion[0].afecta_inventario) {
-                        const [updateResult] = await conn.execute(
+                    if (dev.afecta_inventario) {
+                        await conn.execute(
                             `UPDATE productos SET stock = stock + ? WHERE id = ?`,
                             [detalle.cantidad, detalle.producto_id]
                         );
-                        if (updateResult.affectedRows === 0) {
-                            throw new Error(`No se pudo actualizar el stock del producto ID ${detalle.producto_id}`);
-                        }
                         console.log(`[AUDITORIA] Stock +${detalle.cantidad} para producto ${detalle.producto_id} por devolución ${id}`);
                     }
                 }
-            } else if (devolucion[0].tipo === 'compra') {
+
+                // SI ES CAMBIO DE PRODUCTO: descontar stock del nuevo producto
+                if (dev.motivo === 'cambio_producto' && dev.producto_nuevo_id) {
+                    const [stockNuevo] = await conn.execute(
+                        'SELECT stock FROM productos WHERE id = ? FOR UPDATE',
+                        [dev.producto_nuevo_id]
+                    );
+
+                    // Asumimos cantidad 1 para el cambio por ahora (o podrías guardarla en la tabla)
+                    // Según el requerimiento "cambio directo por otro artículo", usualmente es 1 a 1 de diferente valor.
+                    // Si el usuario no especificó cantidad del nuevo, asumimos la misma cantidad devuelta total o 1.
+                    // Para simplificar, descontaremos 1 unidad del nuevo producto por cada unidad devuelta del original? 
+                    // No, generalmente es un cambio de UN producto por OTRO. 
+                    // Vamos a usar la suma de cantidades devueltas como base.
+                    const cantCambio = detalles.reduce((sum, d) => sum + d.cantidad, 0);
+
+                    if (stockNuevo[0].stock < cantCambio) {
+                        throw new Error(`Stock insuficiente para el producto de cambio. Stock actual: ${stockNuevo[0].stock}, requerido: ${cantCambio}`);
+                    }
+
+                    await conn.execute(
+                        `UPDATE productos SET stock = stock - ? WHERE id = ?`,
+                        [cantCambio, dev.producto_nuevo_id]
+                    );
+                    console.log(`[AUDITORIA] Stock -${cantCambio} para producto nuevo ${dev.producto_nuevo_id} por cambio ${id}`);
+                }
+
+                // ACTUALIZAR ESTADO DE LA VENTA (TRAZABILIDAD)
+                if (dev.referencia_ticket) {
+                    // Calcular si es total o parcial
+                    // 1. Obtener cantidad total vendida en ese ticket
+                    const [totalVendido] = await conn.execute(
+                        `SELECT SUM(cantidad) as total FROM ventas WHERE ticket_numero = ?`,
+                        [dev.referencia_ticket]
+                    );
+
+                    // 2. Obtener cantidad total YA devuelta (incluyendo esta aprobación)
+                    const [totalDevuelto] = await conn.execute(
+                        `SELECT SUM(dd.cantidad) as total 
+                         FROM devoluciones_detalle dd 
+                         JOIN devoluciones d ON dd.devolucion_id = d.id 
+                         WHERE d.referencia_ticket = ? AND d.estado IN ('aprobada', 'pendiente') AND d.tipo = 'venta'`,
+                        [dev.referencia_ticket]
+                    );
+
+                    const cantVenta = Number(totalVendido[0].total) || 0;
+                    const cantDev = Number(totalDevuelto[0].total) || 0;
+
+                    let nuevoEstado = 1; // Parcial
+                    if (cantDev >= cantVenta) nuevoEstado = 2; // Total
+
+                    await conn.execute(
+                        `UPDATE ventas SET estado_devolucion = ? WHERE ticket_numero = ?`,
+                        [nuevoEstado, dev.referencia_ticket]
+                    );
+                }
+
+            } else if (dev.tipo === 'compra') {
                 // Devolución de compra: descontar stock
                 for (const detalle of detalles) {
-                    if (devolucion[0].afecta_inventario) {
-                        // Verificar que hay suficiente stock antes de descontar
+                    if (dev.afecta_inventario) {
                         const [stockActual] = await conn.execute(
                             'SELECT stock FROM productos WHERE id = ? FOR UPDATE',
                             [detalle.producto_id]
                         );
 
-                        if (stockActual.length === 0) {
-                            throw new Error(`Producto ID ${detalle.producto_id} no encontrado`);
-                        }
-
+                        if (stockActual.length === 0) throw new Error(`Producto ID ${detalle.producto_id} no encontrado`);
                         if (stockActual[0].stock < detalle.cantidad) {
                             throw new Error(`Stock insuficiente para el producto ID ${detalle.producto_id}. Stock actual: ${stockActual[0].stock}, requerido: ${detalle.cantidad}`);
                         }
 
                         await conn.execute(
-                            `UPDATE productos SET stock = stock - ? WHERE id = ? AND stock >= ?`,
-                            [detalle.cantidad, detalle.producto_id, detalle.cantidad]
+                            `UPDATE productos SET stock = stock - ? WHERE id = ?`,
+                            [detalle.cantidad, detalle.producto_id]
                         );
                         console.log(`[AUDITORIA] Stock -${detalle.cantidad} para producto ${detalle.producto_id} por devolución de compra ${id}`);
                     }
                 }
             }
 
-            // Actualizar estado
+            // Actualizar estado de la devolución
             await conn.execute(
                 'UPDATE devoluciones SET estado = "aprobada", updated_at = NOW() WHERE id = ?',
                 [id]
@@ -485,7 +549,7 @@ const devolucionesService = {
             WHERE 1=1
         `;
         const params = [];
-        
+
         if (fecha_inicio) { sql += ' AND DATE(created_at) >= ?'; params.push(fecha_inicio); }
         if (fecha_fin) { sql += ' AND DATE(created_at) <= ?'; params.push(fecha_fin); }
 

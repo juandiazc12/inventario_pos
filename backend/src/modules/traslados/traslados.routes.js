@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const ctrl = require('./traslados.controller');
 const authMiddleware = require('../../middleware/auth.middleware');
-const auditMiddleware = require('../../middleware/audit.middleware');
+
 
 router.use(authMiddleware);
-router.use(auditMiddleware);
+
 
 // Rutas estáticas primero
 router.get('/ubicaciones', ctrl.getUbicaciones);

@@ -8,20 +8,20 @@
     </div>
 
     <div class="grid-3" style="margin-bottom:1.5rem">
-        <div class="card" id="res-diario">
+        <div class="card card-premium" id="res-diario">
             <div class="card-header"><span class="card-title"><i class="fas fa-calendar-day"></i> Hoy</span></div>
             <div class="card-body" id="res-diario-body">
                 <div class="loading-screen" style="min-height:80px"><i class="fas fa-spinner fa-spin"></i></div>
             </div>
         </div>
-        <div class="card" id="res-semanal">
+        <div class="card card-premium" id="res-semanal">
             <div class="card-header"><span class="card-title"><i class="fas fa-calendar-week"></i> Esta Semana</span>
             </div>
             <div class="card-body" id="res-semanal-body">
                 <div class="loading-screen" style="min-height:80px"><i class="fas fa-spinner fa-spin"></i></div>
             </div>
         </div>
-        <div class="card" id="res-mensual">
+        <div class="card card-premium" id="res-mensual">
             <div class="card-header"><span class="card-title"><i class="fas fa-calendar-alt"></i> Este Mes</span></div>
             <div class="card-body" id="res-mensual-body">
                 <div class="loading-screen" style="min-height:80px"><i class="fas fa-spinner fa-spin"></i></div>
@@ -32,9 +32,22 @@
 </div>
 </div>
 
-<div class="card" style="margin-bottom:1.5rem">
-    <div class="card-header">
+<div class="card card-premium" style="margin-bottom:1.5rem">
+    <div class="card-header" style="flex-wrap:wrap;gap:1rem">
         <span class="card-title"><i class="fas fa-shopping-bag"></i> Ventas Recientes</span>
+        <div style="display:flex;gap:0.5rem;align-items:center;margin-left:auto">
+            <div class="search-group-premium" style="width:200px">
+                <input type="text" id="ventas-busqueda" class="form-control-premium" placeholder="Buscar venta...">
+                <i class="fas fa-search"></i>
+            </div>
+            <select class="form-control form-control-premium" id="ventas-limite"
+                style="width:auto;padding:0.3rem;font-size:0.8rem">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
     </div>
     <div class="card-body" style="padding:0">
         <div class="table-scroll">
@@ -45,17 +58,20 @@
                         <th>Cliente</th>
                         <th>Ticket</th>
                         <th>Vendedor</th>
+                        <th>Estado</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody id="ventas-recientes-tbody">
                     <tr>
-                        <td colspan="5" class="text-center" style="padding:1.5rem;color:var(--text-muted)">Cargando...
+                        <td colspan="6" class="text-center" style="padding:1.5rem;color:var(--text-muted)">Cargando...
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <div id="ventas-pagination" class="pagination"
+            style="padding:1rem;justify-content:flex-end;border-top:1px solid var(--border)"></div>
     </div>
 </div>
 

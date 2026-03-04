@@ -97,7 +97,7 @@ window.productos_module = {
           </div>
           <div class="form-group">
             <label>Talla / Tamaño</label>
-            <input type="text" class="form-control" id="pf-talla" value="${escapeHtml(producto?.talla || '')}" placeholder="S, M, L, 32, 40...">
+            <input type="text" class="form-control" id="pf-talla" value="${escapeHtml(producto?.talla || '')}" placeholder="S, M, L, 32, 40, IMEI...">
           </div>
           <div class="form-group form-full">
             <label>Subir Imagen</label>

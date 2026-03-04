@@ -102,7 +102,8 @@ window.devoluciones_module = {
     getMotivoBadge(motivo) {
         const m = {
             producto_defectuoso: 'Defectuoso', producto_equivocado: 'Equivocado',
-            no_deseado: 'No deseado', exceso_de_pedido: 'Exceso', mal_estado: 'Mal estado', otro: 'Otro'
+            no_deseado: 'No deseado', exceso_de_pedido: 'Exceso', mal_estado: 'Mal estado',
+            cambio_producto: 'Cambio de Producto', otro: 'Otro'
         };
         return m[motivo] || motivo;
     },
@@ -166,16 +167,38 @@ window.devoluciones_module = {
                                 <option value="no_deseado">No Deseado</option>
                                 <option value="exceso_de_pedido">Exceso de Pedido</option>
                                 <option value="mal_estado">Mal Estado</option>
+                                <option value="cambio_producto">Cambio de Producto</option>
                                 <option value="otro">Otro</option>
                             </select>
                         </div>
                         <div class="form-group" style="margin-bottom:0;">
                             <label>Tipo de Reembolso</label>
-                            <select class="form-control" id="dv-reembolso">
+                            <select class="form-control" id="dv-reembolso" onchange="window.devoluciones_module.toggleCambioUI(this.value)">
                                 <option value="efectivo">Efectivo</option>
                                 <option value="credito">Crédito</option>
                                 <option value="cambio">Cambio por Producto</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- UI de Cambio de Producto -->
+                    <div id="dv-cambio-container" style="display:none; margin-bottom:1rem; padding:1rem; border:1px solid var(--primary); border-radius:var(--radius-sm); background:rgba(var(--primary-rgb), 0.05);">
+                        <label>Buscar Producto de Reemplazo <span style="color:var(--danger);">*</span></label>
+                        <div style="position:relative;">
+                            <input type="text" class="form-control" id="dv-cambio-search" 
+                                placeholder="Nombre o código del nuevo producto..."
+                                oninput="window.devoluciones_module.buscarProductosCambio(this.value)">
+                            <div id="dv-cambio-results" style="
+                                position:absolute; left:0; right:0; top:calc(100% + 4px);
+                                background:var(--bg-card); border:1px solid var(--border);
+                                border-radius:var(--radius-sm); z-index:9999; max-height:200px; overflow-y:auto;
+                            "></div>
+                        </div>
+                        <div id="dv-producto-nuevo-info" style="margin-top:0.5rem; font-size:13px; display:none;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span id="dv-p-nuevo-nombre" style="font-weight:600;"></span>
+                                <span id="dv-p-nuevo-precio" style="color:var(--primary); font-weight:700;"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -191,9 +214,15 @@ window.devoluciones_module = {
                         <label>Notas</label>
                         <textarea class="form-control" id="dv-notas" rows="2" placeholder="Notas adicionales..."></textarea>
                     </div>
-                    <div style="background:var(--bg-root); border-radius:var(--radius-sm); padding:0.75rem; text-align:right;">
-                        <strong>Total a devolver: </strong>
-                        <span id="dv-total" style="color:var(--primary); font-size:1.1rem; font-weight:700;">$0</span>
+                    <div style="background:var(--bg-root); border-radius:var(--radius-sm); padding:0.75rem;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+                            <span style="font-size:0.9rem; color:var(--text-muted);">Total de Devolución:</span>
+                            <span id="dv-total-credito" style="font-weight:600;">$0</span>
+                        </div>
+                        <div id="dv-excedente-row" style="display:none; justify-content:space-between; border-top:1px dashed var(--border); padding-top:0.25rem; color:var(--danger);">
+                            <strong>Adicional a pagar: </strong>
+                            <span id="dv-total-excedente" style="font-size:1.1rem; font-weight:700;">$0</span>
+                        </div>
                     </div>
                 </div>`,
             footer: `
@@ -293,29 +322,119 @@ window.devoluciones_module = {
         const cant = Math.min(parseInt(val) || 0, this.productosDevolucion[index].cantidad_maxima);
         this.productosDevolucion[index].cantidad_devolver = cant;
         const total = this.productosDevolucion.reduce((s, p) => s + p.cantidad_devolver * p.precio_unitario, 0);
-        const el = document.getElementById('dv-total');
-        if (el) el.textContent = Utils.formatCurrency(total);
+
+        const elTotal = document.getElementById('dv-total-credito');
+        if (elTotal) elTotal.textContent = Utils.formatCurrency(total);
+
+        this.calcularExcedente();
+    },
+
+    toggleCambioUI(reembolso) {
+        const container = document.getElementById('dv-cambio-container');
+        const excedenteRow = document.getElementById('dv-excedente-row');
+        const motivo = document.getElementById('dv-motivo');
+
+        if (reembolso === 'cambio') {
+            container.style.display = 'block';
+            excedenteRow.style.display = 'flex';
+            if (motivo) motivo.value = 'cambio_producto';
+        } else {
+            container.style.display = 'none';
+            excedenteRow.style.display = 'none';
+            this.productoNuevo = null;
+        }
+    },
+
+    async buscarProductosCambio(q) {
+        const results = document.getElementById('dv-cambio-results');
+        if (!results) return;
+        if (!q || q.length < 2) { results.innerHTML = ''; return; }
+        try {
+            const productos = await API.get(`/productos?q=${encodeURIComponent(q)}`);
+            results.innerHTML = productos.map(p => `
+                <div onclick="window.devoluciones_module.seleccionarProductoNuevo(${p.id}, '${p.nombre.replace(/'/g, "\\'")}', ${p.precio_venta})"
+                    style="padding:0.75rem 1rem; cursor:pointer; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;"
+                    onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+                    <div>
+                        <strong style="font-size:13px;">${p.nombre}</strong>
+                        <div style="font-size:11px; color:var(--text-muted);">Stock: ${p.stock}</div>
+                    </div>
+                    <strong style="color:var(--primary);">${Utils.formatCurrency(p.precio_venta)}</strong>
+                </div>`).join('');
+        } catch (err) { console.error(err); }
+    },
+
+    seleccionarProductoNuevo(id, nombre, precio) {
+        this.productoNuevo = { id, nombre, precio };
+        document.getElementById('dv-cambio-results').innerHTML = '';
+        document.getElementById('dv-cambio-search').value = nombre;
+        document.getElementById('dv-p-nuevo-nombre').textContent = nombre;
+        document.getElementById('dv-p-nuevo-precio').textContent = Utils.formatCurrency(precio);
+        document.getElementById('dv-producto-nuevo-info').style.display = 'block';
+        this.calcularExcedente();
+    },
+
+    calcularExcedente() {
+        if (!this.productoNuevo) return;
+        const totalCredito = this.productosDevolucion.reduce((s, p) => s + p.cantidad_devolver * p.precio_unitario, 0);
+        const excedente = Math.max(0, this.productoNuevo.precio - totalCredito);
+        const el = document.getElementById('dv-total-excedente');
+        if (el) el.textContent = Utils.formatCurrency(excedente);
     },
 
     async crearDevolucionVenta() {
         if (!this.ventaActual) { Toast.show('Seleccione una venta primero', 'error'); return; }
         const motivo = document.getElementById('dv-motivo')?.value;
+        const reembolso = document.getElementById('dv-reembolso')?.value;
+
         if (!motivo) { Toast.show('Seleccione un motivo', 'error'); return; }
+
+        if (reembolso === 'cambio' && !this.productoNuevo) {
+            Toast.show('Debe seleccionar el producto de reemplazo', 'error');
+            return;
+        }
+
         const productos = this.productosDevolucion.filter(p => p.cantidad_devolver > 0)
             .map(p => ({ producto_id: p.producto_id, cantidad: p.cantidad_devolver }));
+
         if (productos.length === 0) { Toast.show('Seleccione al menos un producto para devolver', 'error'); return; }
 
         try {
-            await API.post('/devoluciones/venta', {
+            const totalCredito = this.productosDevolucion.reduce((s, p) => s + p.cantidad_devolver * p.precio_unitario, 0);
+            const excedente = this.productoNuevo ? Math.max(0, this.productoNuevo.precio - totalCredito) : 0;
+
+            const res = await API.post('/devoluciones/venta', {
                 ticket_numero: this.ventaActual.ticket,
                 productos,
                 motivo,
                 motivo_detalle: document.getElementById('dv-detalle')?.value,
-                tipo_reembolso: document.getElementById('dv-reembolso')?.value || 'efectivo',
+                tipo_reembolso: reembolso,
                 afecta_inventario: document.getElementById('dv-afecta-inventario')?.checked,
-                notas: document.getElementById('dv-notas')?.value
+                notas: document.getElementById('dv-notas')?.value,
+                producto_nuevo_id: this.productoNuevo?.id,
+                valor_adicional: excedente
             });
+
             Toast.show('Devolución de venta creada correctamente', 'success');
+
+            // Imprimir ticket de devolución/cambio
+            if (window.TicketComponent) {
+                const totalFinal = res.total_devuelto + (res.valor_adicional || 0);
+                TicketComponent.mostrar({
+                    ticket_numero: `DEV-${res.codigo}`,
+                    fecha: res.created_at,
+                    cliente_nombre: res.referencia?.cliente_nombre || 'Cliente',
+                    productos: res.detalle.map(d => ({
+                        producto_nombre: `(DEV) ${d.producto_nombre}`,
+                        cantidad: d.cantidad,
+                        precio_venta: d.precio_unitario,
+                        subtotal: d.subtotal
+                    })),
+                    total: res.total_devuelto,
+                    notas: `MOTIVO: ${motivo.replace('_', ' ').toUpperCase()}`
+                });
+            }
+
             Modal.close();
             this.cargarDevoluciones();
             this.cargarStats();

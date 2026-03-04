@@ -4,10 +4,10 @@ const productosController = require('./productos.controller');
 const upload = require('../../config/upload');
 const authMiddleware = require('../../middleware/auth.middleware');
 const { requireRole } = require('../../middleware/role.middleware');
-const auditMiddleware = require('../../middleware/audit.middleware');
+
 
 router.use(authMiddleware);
-router.use(auditMiddleware);
+
 
 router.get('/', productosController.getAll);
 router.get('/mas-vendidos', productosController.getMasVendidos);
